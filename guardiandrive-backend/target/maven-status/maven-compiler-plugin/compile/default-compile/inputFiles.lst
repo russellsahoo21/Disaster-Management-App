@@ -3,6 +3,7 @@ C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\sr
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\config\ApplicationConfig.java
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\dto\AuthenticationRequest.java
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\dto\AuthenticationResponse.java
+C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\dto\GoogleTokenRequest.java
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\dto\RegisterRequest.java
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\exception\GlobalExceptionHandler.java
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\GuardianDriveApplication.java
@@ -13,3 +14,4 @@ C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\sr
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\security\SecurityConfig.java
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\service\AuthenticationService.java
 C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\service\JwtService.java
+C:\Users\Manav Sonawane\Desktop\Disaster-Management-App\guardiandrive-backend\src\main\java\com\guardiandrive\backend\service\OAuthService.java

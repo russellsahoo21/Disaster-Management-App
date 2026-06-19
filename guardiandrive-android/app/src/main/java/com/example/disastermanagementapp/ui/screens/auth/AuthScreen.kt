@@ -27,6 +27,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.disastermanagementapp.data.auth.GoogleAuthClient
+import com.example.disastermanagementapp.data.network.AuthRequest
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 // Shared Theme Colors
 private val PrimaryGreen = Color(0xFF006D36)
@@ -43,11 +51,34 @@ private val TextFieldBackground = Color(0xFFF0F0F0) // Matches the #F9F9F9 inner
 fun AuthScreen(
     onSignInClick: () -> Unit,
     onCreateAccountClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit
+    onForgotPasswordClick: () -> Unit,
+    viewModel: AuthViewModel = viewModel()
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val googleAuthClient = remember { GoogleAuthClient(context) }
+    val authState by viewModel.authState.collectAsState()
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            viewModel.onGoogleSignInResult(account.idToken)
+        } catch (e: Exception) {
+            viewModel.onGoogleSignInResult(null)
+        }
+    }
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) {
+            onSignInClick()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -221,7 +252,11 @@ fun AuthScreen(
 
             // Sign In Button
             Button(
-                onClick = onSignInClick,
+                onClick = {
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        viewModel.login(AuthRequest(email, password))
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues(),
                 shape = RoundedCornerShape(8.dp),
@@ -236,7 +271,7 @@ fun AuthScreen(
                     )
             ) {
                 Text(
-                    text = "Sign In",
+                    text = if (authState is AuthState.Loading) "Authenticating..." else "Sign In",
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
@@ -279,7 +314,7 @@ fun AuthScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedButton(
-                onClick = { /* TODO: Google Login */ },
+                onClick = { launcher.launch(googleAuthClient.signInClient.signInIntent) },
                 shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(1.dp, OutlineVariant.copy(alpha = 0.5f)),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = OnSurfaceCharcoal),
@@ -290,7 +325,16 @@ fun AuthScreen(
                 // Note: Replace with painterResource(id = R.drawable.ic_google) when you have the icon
                 Icon(Icons.Default.AccountCircle, contentDescription = null, modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Continue with Google", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(text = if (authState is AuthState.Loading) "Connecting..." else "Continue with Google", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+            }
+
+            if (authState is AuthState.Error) {
+                Text(
+                    text = (authState as AuthState.Error).message,
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -305,7 +349,13 @@ fun AuthScreen(
                 },
                 fontSize = 14.sp,
                 color = OnSurfaceVariantGrey,
-                modifier = Modifier.clickable(onClick = onCreateAccountClick)
+                modifier = Modifier.clickable {
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        viewModel.register(AuthRequest(email, password))
+                    } else {
+                        // Optional: Show a message to fill details
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(48.dp))

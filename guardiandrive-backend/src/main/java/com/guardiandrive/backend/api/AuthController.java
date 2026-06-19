@@ -2,8 +2,10 @@ package com.guardiandrive.backend.api;
 
 import com.guardiandrive.backend.dto.AuthenticationRequest;
 import com.guardiandrive.backend.dto.AuthenticationResponse;
+import com.guardiandrive.backend.dto.GoogleTokenRequest;
 import com.guardiandrive.backend.dto.RegisterRequest;
 import com.guardiandrive.backend.service.AuthenticationService;
+import com.guardiandrive.backend.service.OAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationService service;
+    private final OAuthService oAuthService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -31,5 +34,12 @@ public class AuthController {
             @Valid @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(service.authenticate(request));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthenticationResponse> googleAuth(
+            @Valid @RequestBody GoogleTokenRequest request
+    ) {
+        return ResponseEntity.ok(oAuthService.authenticateWithGoogle(request.getIdToken()));
     }
 }
