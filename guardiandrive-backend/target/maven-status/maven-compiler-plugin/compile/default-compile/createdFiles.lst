@@ -1,13 +1,16 @@
 com\guardiandrive\backend\dto\AuthenticationResponse$AuthenticationResponseBuilder.class
 com\guardiandrive\backend\exception\GlobalExceptionHandler.class
 com\guardiandrive\backend\security\SecurityConfig.class
+com\guardiandrive\backend\dto\GoogleTokenRequest$GoogleTokenRequestBuilder.class
 com\guardiandrive\backend\repository\UserRepository.class
+com\guardiandrive\backend\service\OAuthService.class
 com\guardiandrive\backend\service\JwtService.class
 com\guardiandrive\backend\config\ApplicationConfig.class
 com\guardiandrive\backend\api\AuthController.class
 com\guardiandrive\backend\service\AuthenticationService.class
 com\guardiandrive\backend\security\JwtAuthenticationFilter.class
 com\guardiandrive\backend\dto\AuthenticationResponse.class
+com\guardiandrive\backend\dto\GoogleTokenRequest.class
 com\guardiandrive\backend\model\User.class
 com\guardiandrive\backend\GuardianDriveApplication.class
 com\guardiandrive\backend\dto\AuthenticationRequest.class

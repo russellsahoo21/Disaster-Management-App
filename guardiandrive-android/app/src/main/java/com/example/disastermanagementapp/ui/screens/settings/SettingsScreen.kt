@@ -44,7 +44,7 @@ fun SettingsScreen(navController: NavController) {
     var routeMonitoringEnabled by remember { mutableStateOf(true) }
 
     Scaffold(
-        topBar = { SettingsTopBar() },
+        topBar = { SettingsTopBar(navController) },
         bottomBar = { SettingsBottomNav(navController = navController) },
         containerColor = AppBackground
     ) { paddingValues ->
@@ -112,7 +112,12 @@ fun SettingsScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedButton(
-                    onClick = { /* Handle Logout */ },
+                    onClick = {
+                        // Navigate to Auth and clear backstack
+                        navController.navigate("auth") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.dp, AlertRed),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = AlertRed),
@@ -288,7 +293,7 @@ private fun SettingToggleItem(
 }
 
 @Composable
-private fun SettingsTopBar() {
+private fun SettingsTopBar(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -298,7 +303,7 @@ private fun SettingsTopBar() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { /* Handle Back */ }, modifier = Modifier.size(36.dp)) {
+            IconButton(onClick = { navController.popBackStack() }, modifier = Modifier.size(36.dp)) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = OnSurfaceCharcoal)
             }
             Spacer(modifier = Modifier.width(8.dp))
